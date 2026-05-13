@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>UML — Sistema E-Commerce Java</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; padding: 24px; }
+
+  h1 { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: #7dd3fc; text-align: center; margin-bottom: 4px; }
+  .subtitle { text-align: center; color: #64748b; font-size: 0.78rem; margin-bottom: 20px; }
+
+  .legend { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.70rem; color: #94a3b8; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 2px; }
+
+  .canvas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 1300px; margin: 0 auto; }
+
+  .uml-class { border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; transition: transform .2s, box-shadow .2s; font-size: 0.71rem; cursor: default; }
+  .uml-class:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,.5); }
+
+  .class-header { padding: 8px 12px; text-align: center; }
+  .class-stereotype { font-size: 0.60rem; opacity: .8; font-style: italic; }
+  .class-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.93rem; }
+
+  .class-section { padding: 7px 12px; border-top: 1px solid rgba(255,255,255,.08); }
+  .section-title { font-size: 0.58rem; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .member { padding: 2px 0; font-size: 0.67rem; display: flex; align-items: flex-start; gap: 4px; }
+  .vis { color: #64748b; flex-shrink: 0; }
+  .mname { color: #cbd5e1; }
+  .mtype { color: #7dd3fc; }
+  .mabstract { color: #f0abfc; font-style: italic; }
+  .moverride { color: #86efac; }
+  .mnew { color: #fbbf24; }
+  .tag { font-size: 0.53rem; color: #4ade80; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.2); border-radius: 3px; padding: 0 3px; margin-left: 2px; flex-shrink: 0; }
+  .tag-new { font-size: 0.53rem; color: #fbbf24; background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3); border-radius: 3px; padding: 0 3px; margin-left: 2px; flex-shrink: 0; }
+  .divider { border: none; border-top: 1px dashed #1e3a5f; margin: 4px 0; }
+
+  /* Colores */
+  .abstract  { background: #1a1040; } .abstract .class-header  { background: #2d1b69; } .abstract .class-name  { color: #c084fc; }
+  .concrete  { background: #0c1a2e; } .concrete .class-header  { background: #0f2744; } .concrete .class-name  { color: #60a5fa; }
+  .iface     { background: #0a1f1a; } .iface .class-header     { background: #0d3321; } .iface .class-name     { color: #34d399; }
+  .service   { background: #1a150a; } .service .class-header   { background: #2d2006; } .service .class-name   { color: #fbbf24; }
+  .persist   { background: #1a0a0a; } .persist .class-header   { background: #2d0f0f; } .persist .class-name   { color: #f87171; }
+  .exception { background: #111827; } .exception .class-header { background: #1f2937; } .exception .class-name { color: #9ca3af; }
+
+  /* Relaciones */
+  .relations { max-width: 1300px; margin: 20px auto 0; padding: 16px; background: #0c111a; border-radius: 8px; border: 1px solid #1e293b; }
+  .relations h2 { font-family: 'Syne', sans-serif; font-size: 0.85rem; color: #7dd3fc; margin-bottom: 12px; }
+  .rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .rel-item { display: flex; align-items: center; gap: 8px; font-size: 0.67rem; color: #94a3b8; padding: 6px 10px; background: #111827; border-radius: 6px; border-left: 3px solid; }
+  .rh { border-color: #c084fc; } .ri { border-color: #34d399; } .ru { border-color: #60a5fa; } .rn { border-color: #fbbf24; }
+  .new-badge { font-size: 0.55rem; background: rgba(251,191,36,.15); color: #fbbf24; border: 1px solid rgba(251,191,36,.3); border-radius: 10px; padding: 1px 6px; margin-left: auto; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1>📐 Diagrama UML de Clases</h1>
+<p class="subtitle">Sistema de E-Commerce — Java POO · v7 (con gestión de usuarios)</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#2d1b69"></div> Clase abstracta</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0f2744"></div> Clase concreta</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0d3321"></div> Interfaz</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2d2006"></div> Servicio</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#2d0f0f"></div> Repositorio</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1f2937"></div> Excepción</div>
+  <div class="legend-item"><div class="legend-dot" style="background:rgba(251,191,36,.3)"></div> Nuevo / modificado</div>
+</div>
+
+<div class="canvas">
+
+  <!-- USUARIO -->
+  <div class="uml-class abstract">
+    <div class="class-header"><div class="class-stereotype">«abstract»</div><div class="class-name">Usuario</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">id: </span><span class="mtype">int</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">nombre: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">email: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">password: </span><span class="mtype">String</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">getRol(): String</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getResumen(): String</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getters / setters</span></div>
+    </div>
+  </div>
+
+  <!-- CLIENTE -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">extends Usuario</div><div class="class-name">Cliente</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">direccion: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">telefono: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">historialPedidos: </span><span class="mtype">ArrayList&lt;Pedido&gt;</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getRol(): String</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getResumen(): String</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">agregarPedido(Pedido)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getters / setters</span></div>
+    </div>
+  </div>
+
+  <!-- ADMINISTRADOR -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">extends Usuario</div><div class="class-name">Administrador</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">codigoAdmin: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">puedeEliminarProductos: </span><span class="mtype">boolean</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getRol(): String</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getResumen(): String</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getters / setters</span></div>
+    </div>
+  </div>
+
+  <!-- PAGO -->
+  <div class="uml-class iface">
+    <div class="class-header"><div class="class-stereotype">«interface»</div><div class="class-name">Pago</div></div>
+    <div class="class-section">
+      <div class="section-title">Métodos abstractos</div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">procesarPago(double): boolean</span></div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">getDescripcionPago(): String</span></div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">getMetodo(): String</span></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO -->
+  <div class="uml-class abstract">
+    <div class="class-header"><div class="class-stereotype">«abstract»</div><div class="class-name">Producto</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">id, nombre, descripcion: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">precio: </span><span class="mtype">double</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">stock: </span><span class="mtype">int</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">categoria: </span><span class="mtype">String</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">getTipoProducto(): String</span></div>
+      <div class="member"><span class="vis">+</span><span class="mabstract">getDetalleEspecifico(): String</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">hayStock(int): boolean</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">reducirStock / aumentarStock</span></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO FISICO -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">extends Producto</div><div class="class-name">ProductoFisico</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">pesoKg: </span><span class="mtype">double</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">dimensiones: </span><span class="mtype">String</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getTipoProducto()</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getDetalleEspecifico()</span><span class="tag">@Override</span></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO DIGITAL -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">extends Producto</div><div class="class-name">ProductoDigital</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">urlDescarga: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">formatoArchivo: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">tamanoMB: </span><span class="mtype">double</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getTipoProducto()</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getDetalleEspecifico()</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">reducirStock(int)</span><span class="tag">@Override</span></div>
+    </div>
+  </div>
+
+  <!-- PAGO TARJETA -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">implements Pago</div><div class="class-name">PagoTarjeta</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">numeroTarjeta, titular: </span><span class="mtype">String</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">fechaExpiracion: </span><span class="mtype">String</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">procesarPago(double)</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getDescripcionPago()</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getMetodo()</span><span class="tag">@Override</span></div>
+    </div>
+  </div>
+
+  <!-- PAGO EFECTIVO -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">implements Pago</div><div class="class-name">PagoEfectivo</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">montoEntregado: </span><span class="mtype">double</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">cambio: </span><span class="mtype">double</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="moverride">procesarPago(double)</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getDescripcionPago()</span><span class="tag">@Override</span></div>
+      <div class="member"><span class="vis">+</span><span class="moverride">getMetodo()</span><span class="tag">@Override</span></div>
+    </div>
+  </div>
+
+  <!-- CARRITO -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">clase</div><div class="class-name">Carrito</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">items: </span><span class="mtype">ArrayList&lt;ItemCarrito&gt;</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">idCliente: </span><span class="mtype">int</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mname">agregarProducto(Producto, int)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">eliminarProducto(int)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">modificarCantidad(int, int)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">calcularTotal(): double</span></div>
+    </div>
+  </div>
+
+  <!-- PEDIDO -->
+  <div class="uml-class concrete">
+    <div class="class-header"><div class="class-stereotype">clase</div><div class="class-name">Pedido</div></div>
+    <div class="class-section">
+      <div class="section-title">Atributos</div>
+      <div class="member"><span class="vis">−</span><span class="mname">id, idCliente: </span><span class="mtype">int</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">items: </span><span class="mtype">ArrayList&lt;ItemCarrito&gt;</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">total: </span><span class="mtype">double</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">estado: </span><span class="mtype">EstadoPedido</span></div>
+      <div class="member"><span class="vis">−</span><span class="mname">metodoPago: </span><span class="mtype">Pago</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Enum EstadoPedido</div>
+      <div class="member" style="color:#fbbf24;font-size:.63rem;">PENDIENTE · PAGADO · EN_ENVIO · ENTREGADO · CANCELADO</div>
+    </div>
+  </div>
+
+  <!-- EXCEPCIONES -->
+  <div class="uml-class exception">
+    <div class="class-header"><div class="class-stereotype">«exception»</div><div class="class-name">StockInsuficienteException</div></div>
+    <div class="class-section">
+      <div class="member"><span class="vis">+</span><span class="mname">extends Exception</span></div>
+      <div class="member" style="color:#64748b;font-size:.63rem;margin-top:4px;">Stock insuficiente al agregar al carrito</div>
+    </div>
+  </div>
+
+  <div class="uml-class exception">
+    <div class="class-header"><div class="class-stereotype">«exception»</div><div class="class-name">CredencialesInvalidasException</div></div>
+    <div class="class-section">
+      <div class="member"><span class="vis">+</span><span class="mname">extends Exception</span></div>
+      <div class="member" style="color:#64748b;font-size:.63rem;margin-top:4px;">Email o contraseña incorrectos</div>
+    </div>
+  </div>
+
+  <!-- USUARIO SERVICE (actualizado) -->
+  <div class="uml-class service" style="border:1px solid rgba(251,191,36,.4);">
+    <div class="class-header"><div class="class-stereotype">«service» — actualizado</div><div class="class-name">UsuarioService</div></div>
+    <div class="class-section">
+      <div class="section-title">Colecciones</div>
+      <div class="member"><span class="vis">−</span><span class="mname">usuarios: </span><span class="mtype">ArrayList&lt;Usuario&gt;</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos existentes</div>
+      <div class="member"><span class="vis">+</span><span class="mname">registrarCliente(...): Cliente</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">login(email, pwd): Usuario</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">buscarPorId(int): Usuario</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getClientes(): ArrayList</span></div>
+    </div>
+    <hr class="divider"/>
+    <div class="class-section">
+      <div class="section-title">Métodos nuevos ★</div>
+      <div class="member"><span class="vis">+</span><span class="mnew">modificarCliente(id, nombre,</span><span class="tag-new">NUEVO</span></div>
+      <div class="member" style="padding-left:14px;"><span class="mnew">email, direccion, tel)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mnew">eliminarCliente(id): boolean</span><span class="tag-new">NUEVO</span></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO SERVICE -->
+  <div class="uml-class service">
+    <div class="class-header"><div class="class-stereotype">«service»</div><div class="class-name">ProductoService</div></div>
+    <div class="class-section">
+      <div class="section-title">Colecciones</div>
+      <div class="member"><span class="vis">−</span><span class="mname">productos: </span><span class="mtype">ArrayList&lt;Producto&gt;</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mname">agregarProductoFisico(...)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">agregarProductoDigital(...)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">modificarProducto(...)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">eliminarProducto(int)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">buscarPorNombre(String)</span></div>
+    </div>
+  </div>
+
+  <!-- PEDIDO SERVICE -->
+  <div class="uml-class service">
+    <div class="class-header"><div class="class-stereotype">«service»</div><div class="class-name">PedidoService</div></div>
+    <div class="class-section">
+      <div class="section-title">Colecciones</div>
+      <div class="member"><span class="vis">−</span><span class="mname">pedidos: </span><span class="mtype">ArrayList&lt;Pedido&gt;</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mname">confirmarPedido(...): Pedido</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">getHistorialCliente(int)</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">actualizarEstado(...)</span></div>
+    </div>
+  </div>
+
+  <!-- GESTOR PERSISTENCIA -->
+  <div class="uml-class persist">
+    <div class="class-header"><div class="class-stereotype">«repository»</div><div class="class-name">GestorPersistencia</div></div>
+    <div class="class-section">
+      <div class="section-title">Archivos CSV</div>
+      <div class="member"><span class="vis">→</span><span class="mname">usuarios.csv</span></div>
+      <div class="member"><span class="vis">→</span><span class="mname">productos.csv</span></div>
+      <div class="member"><span class="vis">→</span><span class="mname">pedidos.csv</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos</div>
+      <div class="member"><span class="vis">+</span><span class="mname">cargarTodo()</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">guardarTodo()</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">guardarUsuarios()</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">guardarProductos()</span></div>
+      <div class="member"><span class="vis">+</span><span class="mname">guardarPedidos()</span></div>
+    </div>
+  </div>
+
+  <!-- VENTANA ADMIN (actualizada) -->
+  <div class="uml-class concrete" style="border:1px solid rgba(251,191,36,.4);">
+    <div class="class-header"><div class="class-stereotype">«vista» — actualizada</div><div class="class-name">VentanaAdmin</div></div>
+    <div class="class-section">
+      <div class="section-title">Pestañas</div>
+      <div class="member"><span class="vis">📦</span><span class="mname"> Tab Productos</span></div>
+      <div class="member"><span class="vis">🧾</span><span class="mname"> Tab Pedidos</span></div>
+      <div class="member"><span class="vis">👥</span><span class="mnew"> Tab Usuarios</span><span class="tag-new">NUEVO</span></div>
+    </div>
+    <div class="class-section">
+      <div class="section-title">Métodos nuevos ★</div>
+      <div class="member"><span class="vis">−</span><span class="mnew">construirTabUsuarios()</span><span class="tag-new">NUEVO</span></div>
+      <div class="member"><span class="vis">−</span><span class="mnew">cargarUsuarios()</span><span class="tag-new">NUEVO</span></div>
+      <div class="member"><span class="vis">−</span><span class="mnew">dialogoEditarUsuario()</span><span class="tag-new">NUEVO</span></div>
+      <div class="member"><span class="vis">−</span><span class="mnew">eliminarUsuario()</span><span class="tag-new">NUEVO</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Relaciones -->
+<div class="relations">
+  <h2>🔗 Relaciones entre clases</h2>
+  <div class="rel-grid">
+    <div class="rel-item rh">▲ Usuario → Cliente (herencia)</div>
+    <div class="rel-item rh">▲ Usuario → Administrador (herencia)</div>
+    <div class="rel-item rh">▲ Producto → ProductoFisico (herencia)</div>
+    <div class="rel-item rh">▲ Producto → ProductoDigital (herencia)</div>
+    <div class="rel-item ri">◇ Pago ← PagoTarjeta (implementa)</div>
+    <div class="rel-item ri">◇ Pago ← PagoEfectivo (implementa)</div>
+    <div class="rel-item ru">→ Carrito usa ArrayList&lt;ItemCarrito&gt;</div>
+    <div class="rel-item ru">→ Pedido usa interfaz Pago</div>
+    <div class="rel-item ru">→ Cliente tiene ArrayList&lt;Pedido&gt;</div>
+    <div class="rel-item rn">★ UsuarioService.modificarCliente() — nuevo<span class="new-badge">NUEVO</span></div>
+    <div class="rel-item rn">★ UsuarioService.eliminarCliente() — nuevo<span class="new-badge">NUEVO</span></div>
+    <div class="rel-item rn">★ VentanaAdmin pestaña 👥 Usuarios<span class="new-badge">NUEVO</span></div>
+  </div>
+</div>
+
+</body>
+</html>
